@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farmacologia II – Mapas Mentais</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --t12: #E63946; --t12b: #fde8ea; --t12d: #9b1a22;
+    --t13: #F4A261; --t13b: #fdf0e4; --t13d: #a05a1a;
+    --t14: #2A9D8F; --t14b: #e0f5f3; --t14d: #1a6b61;
+    --t15: #6C4EBD; --t15b: #ede8f9; --t15d: #3d2878;
+    --t16: #457B9D; --t16b: #e4eef5; --t16d: #224c64;
+    --t17: #C77DFF; --t17b: #f4e8ff; --t17d: #7b2fa8;
+    --bg: #0f0f14;
+    --card: #1a1a24;
+    --text: #f0f0f5;
+    --muted: #8888aa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+    padding: 60px 24px 40px;
+    position: relative;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse at center, rgba(108,78,189,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 0%, #aaa8ff 50%, #ff8fa3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+  }
+  header p {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 15px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── NAV PILLS ── */
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 0 24px 48px;
+  }
+  nav a {
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Syne', sans-serif;
+    transition: all 0.2s;
+    border: 1.5px solid transparent;
+    letter-spacing: 0.3px;
+  }
+  nav a:hover { transform: translateY(-2px); filter: brightness(1.15); }
+
+  /* ── MAIN LAYOUT ── */
+  main { max-width: 1200px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ── AULA SECTION ── */
+  .aula {
+    margin-bottom: 64px;
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .aula-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .aula-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 999px;
+  }
+  .aula-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(18px, 3vw, 26px);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  /* ── DRUG CARDS GRID ── */
+  .drugs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .drug-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 22px;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .drug-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+  .drug-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+
+  .drug-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .drug-class {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    opacity: 0.7;
+  }
+
+  /* ── INFO ROWS ── */
+  .info-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    align-items: flex-start;
+  }
+  .info-label {
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 2px 0;
+    opacity: 0.6;
+    min-width: 48px;
+  }
+  .info-value { color: #d0d0e0; }
+
+  /* ── ALERTS ── */
+  .alert {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .alert.danger { background: rgba(230,57,70,0.12); border-color: rgba(230,57,70,0.3); }
+  .alert.warn   { background: rgba(244,162,97,0.12); border-color: rgba(244,162,97,0.3); }
+  .alert.info   { background: rgba(42,157,143,0.12); border-color: rgba(42,157,143,0.3); }
+  .alert-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── TAGS ── */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.07);
+    color: #ccc;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    grid-column: 1 / -1;
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
+  }
+  .compare-header {
+    padding: 18px 22px 12px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    text-align: left;
+    padding: 10px 22px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: rgba(255,255,255,0.02);
+  }
+  td {
+    padding: 10px 22px;
+    font-size: 13px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    color: #ccc;
+    vertical-align: top;
+  }
+  tr:hover td { background: rgba(255,255,255,0.03); }
+
+  /* ── WIDE CARD ── */
+  .wide { grid-column: 1 / -1; }
+
+  /* ── SCROLL TARGET ── */
+  .scroll-target { scroll-margin-top: 24px; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Farmacologia II<br>Mapas de Estudo</h1>
+  <p>Aulas 12 – 17 · Prof. Gérsika · MED 50 · Conteúdo da Prova</p>
+</header>
+
+<nav>
+  <a href="#a12" style="background:#E63946;color:#fff;">Aula 12 · Tireoide</a>
+  <a href="#a13" style="background:#F4A261;color:#fff;">Aula 13 · Dislipidemias</a>
+  <a href="#a14" style="background:#2A9D8F;color:#fff;">Aula 14 · Obesidade</a>
+  <a href="#a15" style="background:#6C4EBD;color:#fff;">Aula 15 · HAS</a>
+  <a href="#a16" style="background:#457B9D;color:#fff;">Aula 16 · Diuréticos</a>
+  <a href="#a17" style="background:#C77DFF;color:#fff;">Aula 17 · Coagulação</a>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════
+     AULA 12 · TIREOIDE
+════════════════════════════════════════════════ -->
+<section class="aula scroll-target" id="a12" style="animation-delay:0.05s">
+  <div class="aula-header">
+    <span class="aula-number" style="background:var(--t12b);color:var(--t12d);">Aula 12</span>
+    <h2 class="aula-title" style="color:var(--t12)">Farmacoterapia dos Distúrbios de Tireoide</h2>
+  </div>
+  <div class="drugs-grid">
+
+    <div class="drug-card" style="border-top:3px solid var(--t12)">
+      <div class="drug-name" style="color:var(--t12)">Levotiroxina (T4)</div>
+      <div class="drug-class" style="color:var(--t12)">Reposição Hormonal · Hipotireoidismo</div>
+      <div class="info-row"><span class="info-label">Uso</span><span class="info-value">Hipotireoidismo, pós-iodoterapia, pós-tireoidectomia</span></div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">T4 sintético → convertido em T3 pelas desiodinases conforme demanda</span></div>
+      <div class="info-row"><span class="info-label">Tomar</span><span class="info-value">Em jejum, 30–60 min antes do café, só com água</span></div>
+      <div class="info-row"><span class="info-label">Monitor</span><span class="info-value">TSH + T4 livre a cada 4–6 semanas</span></div>
+      <div class="alert warn"><span class="alert-icon">⚠️</span>Não trocar marca após eutireoidismo. Ferro, colestiramina e antiácidos quelam a levotiroxina → intervalo ≥ 2h.</div>
+      <div class="alert danger"><span class="alert-icon">🚨</span>Coma mixedematoso → EV 300–500 mcg (emergência). Rifampicina, fenitoína e carbamazepina aceleram metabolismo → hipotireoidismo descompensado.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t12)">
+      <div class="drug-name" style="color:var(--t12)">Metimazol</div>
+      <div class="drug-class" style="color:var(--t12)">Tionamida · 1ª escolha no hipertireoidismo</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Inibe a tireoperoxidase (TPO) → impede síntese de T3/T4</span></div>
+      <div class="info-row"><span class="info-label">Vantagem</span><span class="info-value">Mais potente, doses menores (5–10 mg), 1–2x/dia</span></div>
+      <div class="info-row"><span class="info-label">Contraindicação</span><span class="info-value">1º trimestre de gestação (aplasia cutis congênita)</span></div>
+      <div class="alert danger"><span class="alert-icon">🚨</span>AGRANULOCITOSE: dor de garganta súbita → hemograma imediato → suspender!</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t12)">
+      <div class="drug-name" style="color:var(--t12)">PTU – Propiltiouracil</div>
+      <div class="drug-class" style="color:var(--t12)">Tionamida · 1ª escolha no 1º trimestre gestacional</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Inibe TPO + inibe conversão periférica T4→T3 (desiodinases)</span></div>
+      <div class="info-row"><span class="info-label">Indicação</span><span class="info-value">Crise tireotóxica grave e 1º trimestre gestacional</span></div>
+      <div class="info-row"><span class="info-label">Desvantagem</span><span class="info-value">Alta hepatotoxicidade; posologia de 8/8h</span></div>
+      <div class="alert warn"><span class="alert-icon">⚠️</span>2º e 3º trimestres: trocar PTU por metimazol.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t12)">
+      <div class="drug-name" style="color:var(--t12)">Propranolol</div>
+      <div class="drug-class" style="color:var(--t12)">Beta-bloqueador não seletivo · Sintomático</div>
+      <div class="info-row"><span class="info-label">Por quê?</span><span class="info-value">Controla taquicardia, tremores e ansiedade do hipertireoidismo</span></div>
+      <div class="info-row"><span class="info-label">Lipossolúvel</span><span class="info-value">Atravessa BHE → reduz ansiedade central</span></div>
+      <div class="info-row"><span class="info-label">Bônus</span><span class="info-value">Em doses altas: inibe conversão T4→T3 (desiodinases)</span></div>
+      <div class="alert info"><span class="alert-icon">💡</span>Trata sintomas adrenérgicos, NÃO a causa do hipertireoidismo.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t12)">
+      <div class="drug-name" style="color:var(--t12)">Iodoterapia (I-131)</div>
+      <div class="drug-class" style="color:var(--t12)">Tratamento Definitivo</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Captado pela tireoide → radiação ablativa do tecido glandular</span></div>
+      <div class="info-row"><span class="info-label">Resultado</span><span class="info-value">Hipotireoidismo permanente → levotiroxina para sempre</span></div>
+      <div class="alert danger"><span class="alert-icon">🚨</span>CONTRAINDICADO: gestantes, crianças e oftalmopatia grave (piora a inflamação ocular). Exige isolamento em quarto revestido.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     AULA 13 · DISLIPIDEMIAS
+════════════════════════════════════════════════ -->
+<section class="aula scroll-target" id="a13" style="animation-delay:0.1s">
+  <div class="aula-header">
+    <span class="aula-number" style="background:var(--t13b);color:var(--t13d);">Aula 13</span>
+    <h2 class="aula-title" style="color:var(--t13)">Tratamento das Dislipidemias</h2>
+  </div>
+  <div class="drugs-grid">
+
+    <div class="drug-card" style="border-top:3px solid var(--t13)">
+      <div class="drug-name" style="color:var(--t13)">Estatinas</div>
+      <div class="drug-class" style="color:var(--t13)">Inibidores da HMG-CoA redutase · 1ª escolha no LDL alto</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Inibe síntese interna de colesterol → fígado ↑ receptores de LDL → capta mais LDL da corrente sanguínea</span></div>
+      <div class="info-row"><span class="info-label">Sinvast.</span><span class="info-value">Meia-vida curta → tomar à noite; maior risco hepático</span></div>
+      <div class="info-row"><span class="info-label">Rosuv.</span><span class="info-value">Meia-vida longa → qualquer horário; mais potente; mais segura</span></div>
+      <div class="alert danger"><span class="alert-icon">🚨</span>RABDOMIÓLISE: fadiga muscular + urina escura → interrupção imediata → risco de IR. CONTRAINDICADAS: gestantes e crianças &lt;12 anos.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t13)">
+      <div class="drug-name" style="color:var(--t13)">Ezetimiba</div>
+      <div class="drug-class" style="color:var(--t13)">Inibidor da absorção de colesterol intestinal</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Bloqueia transportador de esteróis na borda em escova intestinal</span></div>
+      <div class="info-row"><span class="info-label">Vantagem</span><span class="info-value">NÃO inibe CYP450 → poucas interações; ótima para polimedicados</span></div>
+      <div class="info-row"><span class="info-label">Sinergia</span><span class="info-value">Estatina (↓ síntese) + Ezetimiba (↓ absorção) = ação dupla</span></div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t13)">
+      <div class="drug-name" style="color:var(--t13)">Colestiramina / Colestipol</div>
+      <div class="drug-class" style="color:var(--t13)">Sequestrantes de Sais Biliares · Seguros em gestantes</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Quelam sais biliares no intestino → fígado degrada mais colesterol → ↑ receptores LDL</span></div>
+      <div class="info-row"><span class="info-label">Seguro</span><span class="info-value">Gestantes (não interfere na síntese de colesterol)</span></div>
+      <div class="alert warn"><span class="alert-icon">⚠️</span>Quelam outros fármacos (inclusive levotiroxina!). Intervalo ≥ 2h de qualquer medicamento. Reduzem vitaminas A, D, E, K → hipovitaminose.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t13)">
+      <div class="drug-name" style="color:var(--t13)">Fibratos</div>
+      <div class="drug-class" style="color:var(--t13)">Agonistas PPAR-α · 1ª escolha na hipertrigliceridemia</div>
+      <div class="info-row"><span class="info-label">Exemplos</span><span class="info-value">Fenofibrato, Ciprofibrato, Genfibrozila</span></div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Ativam PPAR-α → ↑ lipase lipoproteica (LPL) → degrada triglicerídeos do VLDL</span></div>
+      <div class="alert danger"><span class="alert-icon">🚨</span>Com estatinas: risco de RABDOMIÓLISE. Usar FENOFIBRATO (menor interação). NUNCA genfibrozila com estatina.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t13)">
+      <div class="drug-name" style="color:var(--t13)">Niacina (Vitamina B3)</div>
+      <div class="drug-class" style="color:var(--t13)">Ácido nicotínico · Reduz TG e eleva HDL</div>
+      <div class="info-row"><span class="info-label">Mecanismos</span><span class="info-value">Inibe lipase no adipócito + inibe DGAT2 hepática → menos TG</span></div>
+      <div class="info-row"><span class="info-label">Imediata</span><span class="info-value">Mais flushing, menos hepatotoxicidade</span></div>
+      <div class="info-row"><span class="info-label">Prolongada</span><span class="info-value">Menos flushing, MAS mais hepatotoxicidade</span></div>
+      <div class="alert info"><span class="alert-icon">💡</span>Flushing causado por prostaglandinas → tomar AAS previamente para reduzir.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     AULA 14 · OBESIDADE
+════════════════════════════════════════════════ -->
+<section class="aula scroll-target" id="a14" style="animation-delay:0.15s">
+  <div class="aula-header">
+    <span class="aula-number" style="background:var(--t14b);color:var(--t14d);">Aula 14</span>
+    <h2 class="aula-title" style="color:var(--t14)">Farmacoterapia da Obesidade</h2>
+  </div>
+  <div class="drugs-grid">
+
+    <div class="drug-card" style="border-top:3px solid var(--t14)">
+      <div class="drug-name" style="color:var(--t14)">Sibutramina</div>
+      <div class="drug-class" style="color:var(--t14)">Sacietógeno central · Receita Azul B2</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Inibe recaptação de noradrenalina + serotonina no hipotálamo → saciedade</span></div>
+      <div class="info-row"><span class="info-label">Monitorar</span><span class="info-value">PA e FC (perfil simpaticomimético)</span></div>
+      <div class="info-row"><span class="info-label">Dose</span><span class="info-value">10 mg → máximo 15 mg/dia</span></div>
+      <div class="alert warn"><span class="alert-icon">⚠️</span>Se não perder ≥ 2 kg em 4 semanas → suspender. Contraindicada: doenças cardiovasculares, idosos, crianças, psicóticos.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t14)">
+      <div class="drug-name" style="color:var(--t14)">Orlistat</div>
+      <div class="drug-class" style="color:var(--t14)">Inibidor de lipase intestinal</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Inibe lipases intestinais → ~1/3 da gordura da dieta não é absorvido</span></div>
+      <div class="info-row"><span class="info-label">Dose</span><span class="info-value">120 mg antes das refeições · máx 360 mg/dia</span></div>
+      <div class="info-row"><span class="info-label">Absorção</span><span class="info-value">NÃO é absorvido sistemicamente</span></div>
+      <div class="alert warn"><span class="alert-icon">⚠️</span>Esteatorreia, urgência fecal. Uso crônico: reduz vitaminas A, D, E, K.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t14)">
+      <div class="drug-name" style="color:var(--t14)">Bupropiona + Naltrexona</div>
+      <div class="drug-class" style="color:var(--t14)">Associação sinérgica · Off-label no Brasil</div>
+      <div class="info-row"><span class="info-label">Bupropiona</span><span class="info-value">Inibe recaptação de NA+DA → estimula neurônios POMC → libera alfa-MSH (anorexígeno)</span></div>
+      <div class="info-row"><span class="info-label">Naltrexona</span><span class="info-value">Antagonista opióide → bloqueia o freio opióide nos neurônios POMC → potencializa efeito da bupropiona</span></div>
+      <div class="alert info"><span class="alert-icon">💡</span>Sinergismo: juntos reduzem mais peso do que cada um isolado.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t14)">
+      <div class="drug-name" style="color:var(--t14)">Liraglutida</div>
+      <div class="drug-class" style="color:var(--t14)">Análogo GLP-1 · Aplicação diária</div>
+      <div class="info-row"><span class="info-label">Meia-vida</span><span class="info-value">~13h → aplicação diária SC</span></div>
+      <div class="info-row"><span class="info-label">Victoza</span><span class="info-value">0,6 / 1,2 / 1,8 mg → DM2</span></div>
+      <div class="info-row"><span class="info-label">Saxenda</span><span class="info-value">Até 3 mg → obesidade (dose maior para atingir SNC)</span></div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t14)">
+      <div class="drug-name" style="color:var(--t14)">Semaglutida</div>
+      <div class="drug-class" style="color:var(--t14)">Análogo GLP-1 · Aplicação semanal</div>
+      <div class="info-row"><span class="info-label">Meia-vida</span><span class="info-value">~7 dias → aplicação semanal (melhor adesão)</span></div>
+      <div class="info-row"><span class="info-label">Ozempic</span><span class="info-value">0,25 / 0,5 / 1 mg → DM2</span></div>
+      <div class="info-row"><span class="info-label">Wegovy</span><span class="info-value">Até 2,4 mg → obesidade</span></div>
+      <div class="alert warn"><span class="alert-icon">⚠️</span>Escalonamento obrigatório a cada 4 semanas. Aumento abrupto → internação por intolerância gástrica.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t14)">
+      <div class="drug-name" style="color:var(--t14)">Tirzepatida & Retatrutida</div>
+      <div class="drug-class" style="color:var(--t14)">Agonistas duplo/triplo de incretinas</div>
+      <div class="info-row"><span class="info-label">Tirzepatida</span><span class="info-value">Agonista DUPLO: GLP-1 + GIP → maior perda de peso que semaglutida</span></div>
+      <div class="info-row"><span class="info-label">Retatrutida</span><span class="info-value">Agonista TRIPLO: GLP-1 + GIP + Glucagon → inibe apetite + queima gordura periférica</span></div>
+      <div class="alert info"><span class="alert-icon">💡</span>Retatrutida: o glucagon ativa PKA → lipólise periférica. O efeito hiperglicêmico é compensado pelo GLP-1 e GIP.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     AULA 15 · HAS
+════════════════════════════════════════════════ -->
+<section class="aula scroll-target" id="a15" style="animation-delay:0.2s">
+  <div class="aula-header">
+    <span class="aula-number" style="background:var(--t15b);color:var(--t15d);">Aula 15</span>
+    <h2 class="aula-title" style="color:var(--t15)">Farmacoterapia na Hipertensão Arterial Sistêmica</h2>
+  </div>
+  <div class="drugs-grid">
+
+    <div class="drug-card" style="border-top:3px solid var(--t15)">
+      <div class="drug-name" style="color:var(--t15)">BCCs – Di-hidropiridinas</div>
+      <div class="drug-class" style="color:var(--t15)">Anlodipino, Nifedipino · Bloqueadores de Canal de Cálcio</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Bloqueiam canais Ca²⁺ tipo L nos vasos → vasodilatação → ↓ resistência vascular periférica</span></div>
+      <div class="info-row"><span class="info-label">RAM</span><span class="info-value">Edema maleolar, hipotensão postural, rubor, cefaleia</span></div>
+      <div class="alert warn"><span class="alert-icon">⚠️</span>Nifedipino de liberação IMEDIATA: EVITAR no tratamento crônico. Usar formulações de liberação prolongada (Adalat Oros).</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t15)">
+      <div class="drug-name" style="color:var(--t15)">BCCs – Verapamil / Diltiazem</div>
+      <div class="drug-class" style="color:var(--t15)">Fenilalquilamina / Benzotiazepina</div>
+      <div class="info-row"><span class="info-label">Verapamil</span><span class="info-value">Seletivo para músculo cardíaco → ↓ débito cardíaco. RAM: constipação intensa, bradicardia</span></div>
+      <div class="info-row"><span class="info-label">Diltiazem</span><span class="info-value">Ação mista: vasos + coração. RAM: taquicardia reflexa</span></div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t15)">
+      <div class="drug-name" style="color:var(--t15)">IECAs</div>
+      <div class="drug-class" style="color:var(--t15)">Captopril, Enalapril · Inibidores da ECA</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Inibe ECA → sem angiotensina II + acúmulo de bradicinina → vasodilatação dupla</span></div>
+      <div class="info-row"><span class="info-label">Proteção</span><span class="info-value">Nefroprotetor, cardioprotetor, cérebro-protetor</span></div>
+      <div class="info-row"><span class="info-label">RAM</span><span class="info-value">Tosse seca (bradicinina), hipercalemia, hipotensão</span></div>
+      <div class="alert danger"><span class="alert-icon">🚨</span>ANGIOEDEMA → interrupção IMEDIATA. CONTRAINDICADO em gestantes.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t15)">
+      <div class="drug-name" style="color:var(--t15)">BRAs</div>
+      <div class="drug-class" style="color:var(--t15)">Losartana, Valsartana · Bloqueadores do receptor AT1</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Bloqueia receptor AT1 → sem vasoconstrição. NÃO afeta bradicinina</span></div>
+      <div class="info-row"><span class="info-label">Vantagem</span><span class="info-value">Não causa tosse seca. Mesmos efeitos protetores dos IECAs</span></div>
+      <div class="alert warn"><span class="alert-icon">⚠️</span>IECA + BRA = associação IRRACIONAL (redundante + mais RAM). Ambos causam hipercalemia.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t15)">
+      <div class="drug-name" style="color:var(--t15)">Simpatolíticos Centrais</div>
+      <div class="drug-class" style="color:var(--t15)">Clonidina · Metildopa</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Agonistas α2 pré-sinápticos → feedback negativo → ↓ liberação de noradrenalina</span></div>
+      <div class="info-row"><span class="info-label">Metildopa</span><span class="info-value">1ª ESCOLHA para hipertensão em GESTANTES (ambulatorial)</span></div>
+      <div class="alert warn"><span class="alert-icon">⚠️</span>Contraindicados em idosos e deprimidos (reduz noradrenalina central → piora depressão).</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t15)">
+      <div class="drug-name" style="color:var(--t15)">Beta-bloqueadores</div>
+      <div class="drug-class" style="color:var(--t15)">3 Gerações</div>
+      <div class="info-row"><span class="info-label">1ª (não selet.)</span><span class="info-value">Propranolol → bloqueia todos os β. Perigo em asmáticos</span></div>
+      <div class="info-row"><span class="info-label">2ª (cardiossel.)</span><span class="info-value">Atenolol, Metoprolol → seletivos β1</span></div>
+      <div class="info-row"><span class="info-label">3ª (vasodilatad.)</span><span class="info-value">Carvedilol, Nebivolol → preferíveis em diabéticos</span></div>
+      <div class="alert info"><span class="alert-icon">💡</span>Todos reduzem secreção de renina nos rins → bloqueio indireto do SRAA. Indicados em ICC estabilizada (grau I e II).</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t15)">
+      <div class="drug-name" style="color:var(--t15)">Vasodilatadores Diretos</div>
+      <div class="drug-class" style="color:var(--t15)">Hidralazina · Nitroprussiato de Sódio</div>
+      <div class="info-row"><span class="info-label">Hidralazina</span><span class="info-value">Dilata apenas artérias. 1ª escolha na pré-eclâmpsia</span></div>
+      <div class="info-row"><span class="info-label">Nitroprussiato</span><span class="info-value">Dilata artérias E veias. Uso em UTI/urgências. Apenas em gotejamento calculado → NUNCA em bolus</span></div>
+      <div class="alert danger"><span class="alert-icon">🚨</span>Nitroprussiato >72h → intoxicação por CIANETO. Antídotos: tiossulfato de sódio EV + hidroxicobalamina (Vitamina B12). Fotossensível → proteger da luz.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     AULA 16 · DIURÉTICOS
+════════════════════════════════════════════════ -->
+<section class="aula scroll-target" id="a16" style="animation-delay:0.25s">
+  <div class="aula-header">
+    <span class="aula-number" style="background:var(--t16b);color:var(--t16d);">Aula 16</span>
+    <h2 class="aula-title" style="color:var(--t16)">Farmacologia dos Diuréticos</h2>
+  </div>
+  <div class="drugs-grid">
+
+    <div class="drug-card" style="border-top:3px solid var(--t16)">
+      <div class="drug-name" style="color:var(--t16)">Inibidores de Anidrase Carbônica</div>
+      <div class="drug-class" style="color:var(--t16)">Acetazolamida · Potência: Baixíssima</div>
+      <div class="info-row"><span class="info-label">Local</span><span class="info-value">Túbulo contorcido proximal</span></div>
+      <div class="info-row"><span class="info-label">Indicações</span><span class="info-value">Glaucoma · Pressão intracraniana · Mal da altitude · Alcalose metabólica · Convulsões</span></div>
+      <div class="alert info"><span class="alert-icon">💡</span>Mal da altitude: acidifica o líquor → estimula centro respiratório → ↑ FR → mais O₂.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t16)">
+      <div class="drug-name" style="color:var(--t16)">Diuréticos Osmóticos</div>
+      <div class="drug-class" style="color:var(--t16)">Manitol · Potência: Moderada</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Soluto não reabsorvível → ↑ osmolaridade tubular → arrasta água por osmose</span></div>
+      <div class="info-row"><span class="info-label">Indicações</span><span class="info-value">Edema cerebral · Cirurgias oftalmológicas · Preparo de colonoscopia (VO)</span></div>
+      <div class="alert warn"><span class="alert-icon">⚠️</span>Cuidado em hipertensos: enquanto circula no sangue, puxa água → pico hipertensivo transitório.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t16)">
+      <div class="drug-name" style="color:var(--t16)">Furosemida (Lasix)</div>
+      <div class="drug-class" style="color:var(--t16)">Diurético de Alça · Potência: MAIOR</div>
+      <div class="info-row"><span class="info-label">Local</span><span class="info-value">Alça ascendente de Henle (30–35% do sódio filtrado)</span></div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Inibe Na⁺/K⁺/2Cl⁻ + inibe anidrase carbônica → duplo efeito</span></div>
+      <div class="info-row"><span class="info-label">Duração</span><span class="info-value">~6 horas (Lasix = "Last Six")</span></div>
+      <div class="info-row"><span class="info-label">ICC</span><span class="info-value">Trata SINTOMAS (edema/congestão), NÃO retarda progressão</span></div>
+      <div class="alert danger"><span class="alert-icon">🚨</span>NUNCA associar com aminoglicosídeos → ototoxicidade IRREVERSÍVEL. Hiperuricemia: compete com ácido úrico pelo mesmo transportador → crises de gota.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t16)">
+      <div class="drug-name" style="color:var(--t16)">Espironolactona / Eplerenona</div>
+      <div class="drug-class" style="color:var(--t16)">Poupadores de K⁺ · Antagonistas da Aldosterona</div>
+      <div class="info-row"><span class="info-label">Local</span><span class="info-value">Ducto coletor (3–5% do sódio) · Potência: Baixíssima</span></div>
+      <div class="info-row"><span class="info-label">Benefício ICC</span><span class="info-value">Bloqueia apoptose de cardiomiócitos e fibrose → retarda progressão</span></div>
+      <div class="info-row"><span class="info-label">Espiron.</span><span class="info-value">Não seletiva → bloqueia receptor de testosterona → ginecomastia</span></div>
+      <div class="info-row"><span class="info-label">Eplereon.</span><span class="info-value">Seletiva para aldosterona → sem efeitos hormonais, porém mais cara</span></div>
+      <div class="alert warn"><span class="alert-icon">⚠️</span>Espironolactona + IECA → HIPERCALEMIA grave. AINEs com qualquer diurético → ↓ efeito diurético (↓ fluxo renal).</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t16)">
+      <div class="drug-name" style="color:var(--t16)">Tiazídicos</div>
+      <div class="drug-class" style="color:var(--t16)">Hidroclorotiazida · Clortalidona</div>
+      <div class="info-row"><span class="info-label">Local</span><span class="info-value">Túbulo contorcido distal</span></div>
+      <div class="info-row"><span class="info-label">Indicação</span><span class="info-value">1ª linha na HAS (têm efeito vasodilatador direto adicional)</span></div>
+      <div class="info-row"><span class="info-label">Clortalidona</span><span class="info-value">Meia-vida muito maior → ação mais prolongada</span></div>
+      <div class="alert danger"><span class="alert-icon">🚨</span>PERDEM eficácia se TFG &lt; 50 mL/min. NÃO usar na ICC. Substituir por furosemida quando há insuficiência renal ou edema severo.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     AULA 17 · COAGULAÇÃO
+════════════════════════════════════════════════ -->
+<section class="aula scroll-target" id="a17" style="animation-delay:0.3s">
+  <div class="aula-header">
+    <span class="aula-number" style="background:var(--t17b);color:var(--t17d);">Aula 17</span>
+    <h2 class="aula-title" style="color:var(--t17)">Fármacos nos Distúrbios de Coagulação</h2>
+  </div>
+  <div class="drugs-grid">
+
+    <div class="drug-card" style="border-top:3px solid var(--t17)">
+      <div class="drug-name" style="color:var(--t17)">Vitamina K</div>
+      <div class="drug-class" style="color:var(--t17)">Cofator para síntese dos fatores II, VII, IX e X</div>
+      <div class="info-row"><span class="info-label">K1 (diet.)</span><span class="info-value">Lipossolúvel → depende de sais biliares para absorção</span></div>
+      <div class="info-row"><span class="info-label">K2 (flora)</span><span class="info-value">Produzida pela flora bacteriana intestinal</span></div>
+      <div class="info-row"><span class="info-label">Menadiol</span><span class="info-value">Hidrossolúvel → NÃO depende de sais biliares</span></div>
+      <div class="info-row"><span class="info-label">Antídoto</span><span class="info-value">⭐ Antídoto da varfarina</span></div>
+      <div class="alert warn"><span class="alert-icon">⚠️</span>Na hemofilia B: déficit genético do fator IX. Vitamina K não resolve → usar fator IX recombinante.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t17)">
+      <div class="drug-name" style="color:var(--t17)">Varfarina</div>
+      <div class="drug-class" style="color:var(--t17)">Anticoagulante oral · Antivitamina K</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Inibe vitamina K redutase → sem fatores II, VII, IX, X</span></div>
+      <div class="info-row"><span class="info-label">Monitor</span><span class="info-value">INR (alvo: 2–3; pessoa saudável: 1)</span></div>
+      <div class="info-row"><span class="info-label">Início</span><span class="info-value">LENTO (~48h) → não usar em emergências</span></div>
+      <div class="info-row"><span class="info-label">Antídoto</span><span class="info-value">⭐ Vitamina K</span></div>
+      <div class="alert danger"><span class="alert-icon">🚨</span>TERATOGÊNICA → CONTRAINDICADA em gestantes. Amiodarona INIBE metabolismo da varfarina → ↑ INR → risco de hemorragia. Antibióticos de amplo espectro → destroem flora → ↓ vitamina K2 → potencializa varfarina.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t17)">
+      <div class="drug-name" style="color:var(--t17)">NOACs / DOACs</div>
+      <div class="drug-class" style="color:var(--t17)">Novos Anticoagulantes Orais</div>
+      <div class="info-row"><span class="info-label">-gatrana</span><span class="info-value">Dabigatrana → inibe diretamente a TROMBINA (IIa)</span></div>
+      <div class="info-row"><span class="info-label">-xabana</span><span class="info-value">Rivaroxabana, Apixabana → inibem o FATOR Xa</span></div>
+      <div class="info-row"><span class="info-label">Vantagens</span><span class="info-value">Farmacocinética previsível · Sem monitoramento rotineiro de INR · Menos interações alimentares</span></div>
+      <div class="alert warn"><span class="alert-icon">⚠️</span>Ainda causam sangramento. Contraindicados em gestantes (sem dados). Gestantes → usar heparinas.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t17)">
+      <div class="drug-name" style="color:var(--t17)">Heparinas</div>
+      <div class="drug-class" style="color:var(--t17)">Anticoagulantes injetáveis · 1ª escolha em gestantes</div>
+      <div class="info-row"><span class="info-label">HNF</span><span class="info-value">Inibe fatores IIa + Xa · Via EV · Monitorar TTPA · Maior risco de sangramento e osteopenia</span></div>
+      <div class="info-row"><span class="info-label">HBPM</span><span class="info-value">Enoxaparina · Inibe fator Xa · SC ou EV · Sem monitoramento rotineiro · Mais segura</span></div>
+      <div class="info-row"><span class="info-label">Gestação</span><span class="info-value">⭐ NÃO atravessam a placenta → seguras</span></div>
+      <div class="alert danger"><span class="alert-icon">🚨</span>Antídoto: SULFATO DE PROTAMINA (carga positiva) → liga-se ionicamente à heparina (carga negativa) → neutraliza.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t17)">
+      <div class="drug-name" style="color:var(--t17)">AAS como Antiagregante</div>
+      <div class="drug-class" style="color:var(--t17)">Ácido Acetilsalicílico · Inibe COX-1 de forma irreversível</div>
+      <div class="info-row"><span class="info-label">Dose baixa (100 mg)</span><span class="info-value">Inibe seletivamente tromboxano A2 (agregante) → preserva prostaciclinas (antiagregantes) → ✅ efeito antiagregante</span></div>
+      <div class="info-row"><span class="info-label">Dose alta (>325 mg)</span><span class="info-value">Perde seletividade → inibe prostaciclinas também → ❌ efeito antiagregante reduzido + efeitos gástricos/renais</span></div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t17)">
+      <div class="drug-name" style="color:var(--t17)">Clopidogrel</div>
+      <div class="drug-class" style="color:var(--t17)">Bloqueador do receptor de ADP · Antiagregante</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Bloqueia receptores de ADP nas plaquetas → impede agregação</span></div>
+      <div class="info-row"><span class="info-label">Pró-fármaco</span><span class="info-value">Precisa ser ativado pela CYP2C19</span></div>
+      <div class="alert danger"><span class="alert-icon">🚨</span>OMEPRAZOL inibe CYP2C19 → clopidogrel não é ativado → paciente desprotegido → risco de trombose do stent. Usar pantoprazol.</div>
+    </div>
+
+    <div class="drug-card" style="border-top:3px solid var(--t17)">
+      <div class="drug-name" style="color:var(--t17)">Fibrinolíticos (Trombolíticos)</div>
+      <div class="drug-class" style="color:var(--t17)">Alteplase (tPA) · Estreptoquinase</div>
+      <div class="info-row"><span class="info-label">Mecanismo</span><span class="info-value">Ativam plasminogênio → plasmina → cliva fibrina → dissolve o trombo já formado</span></div>
+      <div class="info-row"><span class="info-label">Alteplase</span><span class="info-value">DNA recombinante · Age preferencialmente na fibrina do trombo · Mais seguro</span></div>
+      <div class="info-row"><span class="info-label">Estreptoquin.</span><span class="info-value">Derivada de bactérias · Ação sistêmica · Mais risco de hemorragia · Não repetir (anticorpos)</span></div>
+      <div class="alert info"><span class="alert-icon">💡</span>Indicados em emergências: IAM, AVC isquêmico. Destroem trombo JÁ FORMADO (diferente dos anticoagulantes que previnem).</div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer style="text-align:center; padding: 32px 24px; color: var(--muted); font-size: 13px; border-top: 1px solid rgba(255,255,255,0.05);">
+  Farmacologia II · Aulas 12–17 · Prof. Gérsika · MED 50
+</footer>
+
+</body>
+</html>
